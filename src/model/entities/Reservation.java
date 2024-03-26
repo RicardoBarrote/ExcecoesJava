@@ -4,6 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.exceptions.DomainExceptions;
+
+
+
 public class Reservation {
 	
 	
@@ -17,7 +21,13 @@ public class Reservation {
 
 	}
 
-	public Reservation(Integer numeroQuarto, Date checkIn, Date checkOut) {
+	public Reservation(Integer numeroQuarto, Date checkIn, Date checkOut) throws DomainExceptions{
+		if (!checkOut.after(checkIn)) {
+			throw new DomainExceptions ("Erro: Data de check-out tem que ser futura a data de check-in. ");
+		}
+		//Tratamento de condição no construtor, caso o dado de checkOut que o usuário digitar seja anterior ao checkIn o programa já vai identificar o erro e repassar a mensagem.
+		//
+		//
 		this.numeroQuarto = numeroQuarto;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -54,19 +64,24 @@ public class Reservation {
 																		// Classe -> TimeUnit || .DAYS -> tipo que será convertido || .convert -> informando que será uma conversão do valor que estará dentro do () para DAYS.			
 	}
 	
-	public String atualizarDatas (Date checkIn, Date checkOut) {
+	public void atualizarDatas (Date checkIn, Date checkOut) throws DomainExceptions{
 		Date now = new Date();
 		if (checkIn.before(now) || checkOut.before(now)) {
-			return "Erro na reserva: Data de reserva para atualização deve ser futura";
+			throw new DomainExceptions ("Erro na reserva: Data de reserva para atualização deve ser futura");
 		} 
 		if (!checkOut.after(checkIn)) {
-			return "Erro: Data de check-out tem que ser futura a data de check-in. ";
+			throw new DomainExceptions ("Erro: Data de check-out tem que ser futura a data de check-in. ");
 		}
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		return null;
 	}
 	// Metodo vai retornar um erro caso a data esteja dentro das condições do IF, caso não o metodo vai retornar as datas atualizadas escolhidas pelo usuario.
+	//
+	//
+	//Observação !!
+	//Diferença de throw e throws || throws e para informar quem chamou o método onde ocorreu uma exceção para tratá-la.
+	//
+	//Throw e usado para o código do programador lançar uma exceção.
 	
 	@Override
 	public String toString () {
