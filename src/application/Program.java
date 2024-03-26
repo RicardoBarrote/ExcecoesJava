@@ -12,9 +12,6 @@ public class Program {
 
 	public static void main(String[] args) throws ParseException {
 
-		// Método ruim, pós a lógica para efetuar a reserva encontra-se na classe
-		// principal do programa, coisa que não deve acontecer, a lógica tem que ser
-		// feita na classe de RESERVA (Reservation).
 		//
 		//
 		//
@@ -33,7 +30,8 @@ public class Program {
 
 		if (!dataCheckOut.after(dataCheckIn)) {
 			System.out.println("Erro: Data de check-out tem que ser futura a data de check-in. ");
-		} else {
+		} 
+		else {
 			Reservation reserva = new Reservation(nQuarto, dataCheckIn, dataCheckOut);
 			System.out.println(reserva);
 
@@ -42,8 +40,6 @@ public class Program {
 			System.out.print("Deseja atualizar os dados da reserva ? (s/n)");
 			char resposta = sc.next().charAt(0);
 
-			Date now = new Date();
-
 			if (resposta == 's') {
 				System.out.println();
 				System.out.println("Insira a nova data de reserva: ");
@@ -51,19 +47,15 @@ public class Program {
 				dataCheckIn = sdf.parse(sc.next());
 				System.out.print("Data de check-out (Dia/Mês/Ano): ");
 				dataCheckOut = sdf.parse(sc.next());
-
-				if (dataCheckIn.before(now) || dataCheckOut.before(now)) {
-					System.out.println("Erro na reserva: Data de reserva para atualização deve ser futura");
-				} else if (!dataCheckOut.after(dataCheckIn)) {
-					System.out.println("Erro: Data de check-out tem que ser futura a data de check-in. ");
-				} else {
-					reserva.atualizarDatas(dataCheckIn, dataCheckOut);
-					System.out.println("Reserva atualizada: " + reserva);
+				
+				String erro = reserva.atualizarDatas(dataCheckIn, dataCheckOut);
+				if (erro != null) {
+					System.out.println(erro);
 				}
-			} else {
-				System.out.println("Reserva mantida");
-				System.out.println(reserva);
-			}
+				else {
+					System.out.println("Reserva: " + reserva);
+				}
+			} 
 		}
 
 		sc.close();

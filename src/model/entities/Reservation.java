@@ -54,10 +54,19 @@ public class Reservation {
 																		// Classe -> TimeUnit || .DAYS -> tipo que será convertido || .convert -> informando que será uma conversão do valor que estará dentro do () para DAYS.			
 	}
 	
-	public void atualizarDatas (Date checkIn, Date checkOut) {
+	public String atualizarDatas (Date checkIn, Date checkOut) {
+		Date now = new Date();
+		if (checkIn.before(now) || checkOut.before(now)) {
+			return "Erro na reserva: Data de reserva para atualização deve ser futura";
+		} 
+		if (!checkOut.after(checkIn)) {
+			return "Erro: Data de check-out tem que ser futura a data de check-in. ";
+		}
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		return null;
 	}
+	// Metodo vai retornar um erro caso a data esteja dentro das condições do IF, caso não o metodo vai retornar as datas atualizadas escolhidas pelo usuario.
 	
 	@Override
 	public String toString () {
